@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import authRoutes from './routes/auth.routes.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 import errorHandler from './middleware/errorHandler.js';
 
 const app = express();
@@ -13,17 +14,24 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'VidScribe API is running' });
+  res.status(200).json({
+    status: 'ok',
+    message: 'VidScribe API is running',
+  });
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
-// 404 handler — must come after all routes
+// 404 handler
 app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
+  res.status(404).json({
+    success: false,
+    message: 'Route not found',
+  });
 });
 
-// Centralized error handler — must be last
+// Global error handler
 app.use(errorHandler);
 
 export default app;
