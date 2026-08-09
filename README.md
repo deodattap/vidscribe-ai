@@ -2,80 +2,31 @@
 
 > **Coming Soon 🚧**
 >
-> Transform YouTube videos into intelligent, AI-powered content.
+> An AI-powered platform that transforms YouTube videos into blogs, summaries, social media content, study notes, and more.
 
 ---
 
 ## 🚀 About
 
-VidScribe is an AI-powered Content Intelligence Platform that converts YouTube videos into multiple content formats using Artificial Intelligence.
+**VidScribe** is an AI-powered content repurposing platform that converts YouTube videos into useful, ready-to-use content.
 
-Simply paste a YouTube video URL, and VidScribe will extract the transcript, understand the content, and generate high-quality outputs tailored for different use cases.
+Instead of watching an entire video and manually taking notes or rewriting its content, users can simply provide a YouTube URL. VidScribe extracts the video's transcript, processes the content, and uses AI to generate different content formats based on the user's needs.
 
-Whether you're a student, content creator, developer, or marketer, VidScribe helps you repurpose video content in seconds.
+The platform is designed for **students, content creators, developers, educators, and marketers** who want to turn long-form video content into concise and reusable information.
 
----
+### Core Idea
 
-## ✨ Planned Features
-
-- 🎥 YouTube Transcript Extraction
-- 📝 SEO-Optimized Blog Generation
-- 📄 AI Summaries
-- 💼 LinkedIn Post Generator
-- 🧵 X (Twitter) Thread Generator
-- 📚 Study Notes
-- ❓ MCQ Generation
-- 📂 Content History
-- 📤 Export to Markdown & DOCX
-- 🔐 Secure User Authentication
-- 📊 Analytics Dashboard
-
----
-
-## 🛠 Tech Stack
-
-### Frontend
-- React
-- Vite
-- Tailwind CSS
-- shadcn/ui
-
-### Backend
-- Node.js
-- Express.js
-
-### Database
-- MongoDB Atlas
-- Mongoose
-
-### AI
-- OpenAI API
-- YouTube Transcript API
-
----
-
-## 📌 Project Status
-
-🚧 **Currently Under Development**
-
-Current Progress:
-- ✅ Backend Setup
-- ✅ Frontend Setup
-- ✅ MongoDB Integration
-- ✅ Authentication System
-- ⏳ Dashboard
-- ⏳ AI Content Generation
-- ⏳ Export Functionality
-- ⏳ Deployment
-
----
-
-## 📷 Preview
-
-Coming Soon...
-
----
-
-## 📄 License
-
-This project is currently being developed as a personal portfolio and learning project.
+```text
+YouTube Video
+      ↓
+Transcript Extraction
+      ↓
+Content Processing
+      ↓
+AI Analysis
+      ↓
+┌─────────────┬─────────────┬──────────────┐
+│    Blog     │   Summary   │  Social Post │
+├─────────────┼─────────────┼──────────────┤
+│ Study Notes │    MCQs     │     More     │
+└─────────────┴─────────────┴──────────────┘
