@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+
 import authRoutes from './routes/auth.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import errorHandler from './middleware/errorHandler.js';
 import videoRoutes from './routes/video.routes.js';
+import contentRoutes from './routes/content.routes.js';
 
 const app = express();
 
@@ -24,6 +26,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/content', contentRoutes);
 
 // 404 handler
 app.use((req, res) => {
