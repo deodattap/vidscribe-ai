@@ -29,3 +29,37 @@ Summary:`;
 
   return completion.choices[0].message.content.trim();
 };
+
+/**
+ * Generates a full SEO blog post with structured fields from a transcript.
+ */
+export const generateBlog = async (transcriptText) => {
+  const prompt = `You are an expert SEO content writer. Based on the following YouTube video transcript, generate a complete blog post.
+
+Respond with ONLY valid JSON (no markdown fences, no explanation) in exactly this shape:
+{
+  "title": "SEO-friendly title, under 70 characters",
+  "metaDescription": "Compelling meta description, 140-160 characters",
+  "slug": "url-friendly-slug-based-on-title",
+  "content": "Full blog body in Markdown, using ## for H2 and ### for H3 headings, well-structured with an intro, 3-5 main sections, and a conclusion",
+  "faqs": [
+    { "question": "A relevant question readers might have", "answer": "A concise answer" }
+  ]
+}
+
+Include 3-4 FAQs. Base everything strictly on the transcript content — do not invent facts not present in it.
+
+Transcript:
+"""
+${transcriptText.slice(0, 12000)}
+"""`;
+
+  const completion = await openai.chat.completions.create({
+  model: MODEL,
+  messages: [{ role: 'user', content: prompt }],
+  temperature: 0.6,
+  });
+
+  const parsed = JSON.parse(completion.choices[0].message.content);
+  return parsed;
+};
