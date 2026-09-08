@@ -1,8 +1,12 @@
 import Video from '../models/Video.js';
 import Transcript from '../models/Transcript.js';
 import GeneratedContent from '../models/GeneratedContent.js';
-import { generateSummary } from '../services/ai.service.js';
+import { generateSummary, generateBlog } from '../services/ai.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
+import {
+  calculateReadingTime,
+  calculateWordCount,
+} from '../utils/blogHelpers.js';
 
 const getVideoAndTranscript = async (videoId, userId) => {
   const video = await Video.findOne({ _id: videoId, user: userId });
@@ -37,4 +41,35 @@ export const generateVideoSummary = asyncHandler(async (req, res) => {
   );
 
   res.status(201).json({ success: true, content });
+});
+
+// @desc    Generate (or regenerate) a blog post for a video
+// @route   POST /api/content/blog
+export const generateVideoBlog = asyncHandler(async (req, res) => {
+  const { videoId } = req.body;
+  const { transcript } = await getVideoAndTranscript(videoId, req.user.id);
+
+  const blogData = await generateBlog(transcript.rawText);
+
+  const enrichedContent = {
+    ...blogData,
+    readingTime: calculateReadingTime(blogData.content),
+    wordCount: calculateWordCount(blogData.content),
+  };
+
+  const content = await GeneratedContent.findOneAndUpdate(
+    { video: videoId, type: 'blog' },
+    {
+      video: videoId,
+      user: req.user.id,
+      type: 'blog',
+      content: enrichedContent,
+    },
+    { upsert: true, new: true }
+  );
+
+  res.status(201).json({
+    success: true,
+    content,
+  });
 });
