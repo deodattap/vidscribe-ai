@@ -2,10 +2,11 @@ import 'dotenv/config';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: 'https://api.groq.com/openai/v1',
 });
 
-const MODEL = 'gpt-4o-mini';
+const MODEL = 'openai/gpt-oss-20b';
 
 /**
  * Generates a concise summary of a transcript.
