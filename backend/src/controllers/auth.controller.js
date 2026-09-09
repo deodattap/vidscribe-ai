@@ -65,3 +65,20 @@ export const updateProfile = asyncHandler(async (req, res) => {
     user: { id: user._id, name: user.name, email: user.email },
   });
 });
+
+// @desc    Change password
+// @route   PUT /api/auth/change-password
+export const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user.id).select('+password');
+  if (!(await user.comparePassword(currentPassword))) {
+    res.status(401);
+    throw new Error('Current password is incorrect');
+  }
+
+  user.password = newPassword; // pre-save hook re-hashes automatically
+  await user.save();
+
+  res.status(200).json({ success: true, message: 'Password updated successfully' });
+});
