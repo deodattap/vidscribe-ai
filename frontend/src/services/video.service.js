@@ -5,8 +5,8 @@ export const processVideo = async (url) => {
   return response.data;
 };
 
-export const getVideos = async () => {
-  const response = await api.get('/videos');
+export const getVideos = async (params = {}) => {
+  const response = await api.get('/videos', { params });
   return response.data;
 };
 

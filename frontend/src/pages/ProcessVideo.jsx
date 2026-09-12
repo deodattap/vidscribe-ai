@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Link as LinkIcon } from 'lucide-react';
 import { useProcessVideo } from '../hooks/useProcessVideo';
@@ -11,6 +11,16 @@ const ProcessVideo = () => {
   const [url, setUrl] = useState('');
   const navigate = useNavigate();
   const { mutate, isPending, error } = useProcessVideo();
+
+  // If the user pasted a URL on the public landing page before signing
+  // in/up, pick it up here so they don't have to re-type it.
+  useEffect(() => {
+    const pending = localStorage.getItem('pendingVideoUrl');
+    if (pending) {
+      setUrl(pending);
+      localStorage.removeItem('pendingVideoUrl');
+    }
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -1,5 +1,6 @@
 import Video from '../models/Video.js';
 import Transcript from '../models/Transcript.js';
+import GeneratedContent from '../models/GeneratedContent.js';
 import { extractVideoId } from '../utils/youtubeUrl.js';
 import { fetchTranscript, cleanTranscript, getWordCount } from '../services/youtube.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
@@ -46,10 +47,30 @@ export const processVideo = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get all videos for the logged-in user
-// @route   GET /api/videos
+// @desc    Get all videos for the logged-in user, with optional
+//          search/filter/sort
+// @route   GET /api/videos?search=&status=&sort=
+//          sort: 'newest' (default) | 'oldest' | 'wordcount'
 export const getVideos = asyncHandler(async (req, res) => {
-  const videos = await Video.find({ user: req.user.id }).sort({ createdAt: -1 });
+  const { search, status, sort } = req.query;
+
+  const query = { user: req.user.id };
+
+  if (search) {
+    query.youtubeUrl = { $regex: search.trim(), $options: 'i' };
+  }
+
+  if (status && ['processing', 'completed', 'failed'].includes(status)) {
+    query.status = status;
+  }
+
+  const sortMap = {
+    newest: { createdAt: -1 },
+    oldest: { createdAt: 1 },
+    wordcount: { wordCount: -1 },
+  };
+
+  const videos = await Video.find(query).sort(sortMap[sort] || sortMap.newest);
   res.status(200).json({ success: true, videos });
 });
 
@@ -63,8 +84,9 @@ export const getVideoById = asyncHandler(async (req, res) => {
   }
 
   const transcript = await Transcript.findOne({ video: video._id });
+  const generatedContent = await GeneratedContent.find({ video: video._id });
 
-  res.status(200).json({ success: true, video, transcript });
+  res.status(200).json({ success: true, video, transcript, generatedContent });
 });
 
 // @desc    Delete a video (and its transcript)

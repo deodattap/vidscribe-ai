@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
     try {
       await login(formData);
-      navigate('/dashboard');
+      navigate(localStorage.getItem('pendingVideoUrl') ? '/process' : '/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {

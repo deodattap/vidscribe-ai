@@ -12,14 +12,23 @@ const generatedContentSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    // Not a hardcoded enum on purpose: valid types live in
+    // config/contentTypes.js and are validated there in the controller,
+    // so adding a new content type never requires a model migration.
     type: {
       type: String,
-      enum: ['summary', 'blog', 'linkedin', 'twitter', 'notes', 'mcq'],
       required: true,
     },
     content: {
-      type: mongoose.Schema.Types.Mixed, // shape varies by type — string for summary, structured object for blog/mcq
+      type: mongoose.Schema.Types.Mixed, // shape varies by type — see config/contentTypes.js
       required: true,
+    },
+    // The generation parameters (word count, tone, audience, language,
+    // custom instructions) used to produce this content — lets the UI
+    // show what was used and re-apply the same params on regenerate.
+    params: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {},
     },
   },
   { timestamps: true }

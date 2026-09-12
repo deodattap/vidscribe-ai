@@ -1,10 +1,11 @@
-import { Video, FileText, Sparkles, Plus } from 'lucide-react';
+import { Video, FileText, Sparkles, Plus, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useDashboardStats } from '../hooks/useDashboardStats';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 const StatCard = ({ icon: Icon, label, value, loading }) => (
   <Card>
@@ -56,7 +57,26 @@ const Dashboard = () => {
               </Button>
             </div>
           ) : (
-            <div>{/* recent activity list — built in Phase 4/6 */}</div>
+            <div className="space-y-2">
+              {data.recentActivity.map((item) => (
+                <Link
+                  key={item.id}
+                  to={`/videos/${item.id}`}
+                  className="flex items-center justify-between gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors"
+                >
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-sm font-medium truncate">{item.youtubeUrl}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(item.createdAt).toLocaleDateString()} · {item.wordCount} words
+                    </p>
+                  </div>
+                  <Badge variant={item.status === 'failed' ? 'destructive' : 'secondary'}>
+                    {item.status}
+                  </Badge>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                </Link>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>

@@ -20,7 +20,7 @@ const Register = () => {
     setLoading(true);
     try {
       await register(formData);
-      navigate('/dashboard');
+      navigate(localStorage.getItem('pendingVideoUrl') ? '/process' : '/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
     } finally {
